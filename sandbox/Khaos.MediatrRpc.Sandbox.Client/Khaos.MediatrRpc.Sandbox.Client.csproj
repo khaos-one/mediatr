@@ -12,4 +12,8 @@
       <ProjectReference Include="..\Khaos.MediatrRpc.Sandbox.Contracts\Khaos.MediatrRpc.Sandbox.Contracts.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    </ItemGroup>
+
 </Project>

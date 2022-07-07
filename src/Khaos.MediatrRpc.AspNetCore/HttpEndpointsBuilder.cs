@@ -30,12 +30,10 @@ public class HttpEndpointsBuilder
         var genericHandlerMethodBuilder = GetGenericHandlerMethodBuilder();
         var genericHandlerMethodBuilderWithReturnType = GetGenericHandlerMethodBuilderWithReturnType();
 
-        var typedRequestInterface = requestType.GetInterface("IRequest`1");
-
-        if (typedRequestInterface is not null)
+        var returnType = RequestReturnTypeExtractor.TryGetReturnType(requestType);
+        
+        if (returnType is not null)
         {
-            var returnType = typedRequestInterface.GetGenericArguments().FirstOrDefault();
-
             concreteHandler =
                 (Delegate) genericHandlerMethodBuilderWithReturnType
                     .MakeGenericMethod(requestType, returnType!)
