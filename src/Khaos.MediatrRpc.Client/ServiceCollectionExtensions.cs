@@ -6,31 +6,27 @@ namespace Khaos.MediatrRpc.Client;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddMediatrRpc<TMarker>(
-        this IServiceCollection services)
-    {
-        AddMediatrRpcClient<TMarker>(services);
-        AddMediatrTransboundaryHandlers(services, typeof(TMarker));
-    }
-    
-    public static void AddMediatrRpc<TMarker>(
+    public static void AddMediatrRpcClient(
         this IServiceCollection services,
-        Action<HttpClient> configureClient)
+        Type assemblyMarkerType,
+        Action<HttpClient> configureHttpClient)
     {
-        AddMediatrRpcClient<TMarker>(services, configureClient);
-        AddMediatrTransboundaryHandlers(services, typeof(TMarker));
+        AddMediatrRpcHttpClient(services, assemblyMarkerType, configureHttpClient);
+        AddMediatrRpcTransboundaryHandlers(services, assemblyMarkerType);
     }
-    
-    internal static IHttpClientBuilder AddMediatrRpcClient<TMarker>(
-        this IServiceCollection services,
-        Action<HttpClient> configureClient) => 
-        services.AddHttpClient<IMediatorRpcClient<TMarker>, MediatrRpcClient<TMarker>>(configureClient);
-    
-    internal static IHttpClientBuilder AddMediatrRpcClient<TMarker>(
-        this IServiceCollection services) => 
-        services.AddHttpClient<IMediatorRpcClient<TMarker>, MediatrRpcClient<TMarker>>();
 
-    internal static IServiceCollection AddMediatrTransboundaryHandlers(
+    private static void AddMediatrRpcHttpClient(
+        this IServiceCollection services,
+        Type assemblyMarkerType,
+        Action<HttpClient> configureHttpClient)
+    {
+        services.AddHttpClient(HttpClientNameFactory.Get(assemblyMarkerType), configureHttpClient);
+        services.AddScoped(
+            typeof(IMediatorRpcClient<>).MakeGenericType(assemblyMarkerType),
+            typeof(MediatrRpcClient<>).MakeGenericType(assemblyMarkerType));
+    }
+
+    private static void AddMediatrRpcTransboundaryHandlers(
         this IServiceCollection services, params Type[] assemblyMarkerTypes)
     {
         var genericHandlerWithReturnType = typeof(RpcRequestHandler<,>);
@@ -73,7 +69,5 @@ public static class ServiceCollectionExtensions
                     });
             }
         }
-
-        return services;
     }
 }

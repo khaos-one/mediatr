@@ -8,22 +8,25 @@ namespace Khaos.MediatrRpc.Client;
 
 public sealed class MediatrRpcClient<TMarker> : IMediatorRpcClient<TMarker>
 {
-    private readonly HttpClient _client;
+    private static readonly string HttpClientName = HttpClientNameFactory.Get(typeof(TMarker));
+    
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public MediatrRpcClient(HttpClient client)
+    public MediatrRpcClient(IHttpClientFactory httpClientFactory)
     {
-        _client = client;
+        _httpClientFactory = httpClientFactory;
     }
 
     public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
     {
         var requestType = request.GetType();
         
-        var requestMessage = new HttpRequestMessage(HttpMethod.Post, TypeRouteNameFactory.Get(requestType));
+        var requestMessage = new HttpRequestMessage(HttpMethod.Post, TypeRoutePathFactory.Get(requestType));
         var requestBody = JsonConvert.SerializeObject(request);
         requestMessage.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-        
-        var responseMessage = await _client.SendAsync(requestMessage, cancellationToken);
+
+        var client = _httpClientFactory.CreateClient(HttpClientName);
+        var responseMessage = await client.SendAsync(requestMessage, cancellationToken);
 
         responseMessage.EnsureSuccessStatusCode();
 

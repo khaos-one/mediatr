@@ -87,6 +87,7 @@
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=fanout/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Quant/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Stringified/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Transboundary/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Transposer/@EntryIndexedValue">True</s:Boolean>	
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Subagent/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=UPSERT/@EntryIndexedValue">True</s:Boolean>

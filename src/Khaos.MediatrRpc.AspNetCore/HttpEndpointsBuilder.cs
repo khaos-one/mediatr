@@ -18,7 +18,7 @@ public class HttpEndpointsBuilder
         foreach (var mediatrType in _discoverer.EnumerateMediatrTypes())
         {
             yield return new(
-                TypeRouteNameFactory.Get(mediatrType),
+                TypeRoutePathFactory.Get(mediatrType),
                 ConstructHandler(mediatrType));
         }
     }

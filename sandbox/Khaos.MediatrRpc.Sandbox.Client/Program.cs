@@ -7,19 +7,10 @@ using MediatR;
 
 using Microsoft.Extensions.DependencyInjection;
 
-var httpClient = new HttpClient();
-httpClient.BaseAddress = new Uri("http://localhost:5000");
-
-var client = new MediatrRpcClient<AssemblyMarker>(httpClient);
-
-var result = await client.Send(new Query("Hi"));
-
-Console.WriteLine(result.Value);
-
 var services = new ServiceCollection();
 
 services.AddMediatR(typeof(AssemblyMarker));
-services.AddMediatrRpc<AssemblyMarker>(options => options.BaseAddress = new Uri("http://localhost:5000"));
+services.AddMediatrRpcClient(typeof(AssemblyMarker), options => options.BaseAddress = new Uri("http://localhost:5000"));
 
 var serviceProvider = services.BuildServiceProvider();
 
