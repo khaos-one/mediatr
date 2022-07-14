@@ -1,14 +1,18 @@
 using System.Text;
+using System.Text.Json;
 
 using MediatR;
 
-using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Khaos.MediatrRpc.Client;
 
 public sealed class MediatrRpcClient<TMarker> : IMediatorRpcClient<TMarker>
 {
     private static readonly string HttpClientName = HttpClientNameFactory.Get(typeof(TMarker));
+
+    // ReSharper disable once StaticMemberInGenericType
+    private static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new(JsonSerializerDefaults.Web);
     
     private readonly IHttpClientFactory _httpClientFactory;
 
@@ -22,7 +26,12 @@ public sealed class MediatrRpcClient<TMarker> : IMediatorRpcClient<TMarker>
         var requestType = request.GetType();
         
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, TypeRoutePathFactory.Get(requestType));
-        var requestBody = JsonConvert.SerializeObject(request);
+        // var requestBody = JsonConvert.SerializeObject(request, requestType, new JsonSerializerSettings());
+        var requestBody = JsonSerializer.Serialize(
+            request,
+            requestType,
+            DefaultJsonSerializerOptions);
+
         requestMessage.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
 
         var client = _httpClientFactory.CreateClient(HttpClientName);
@@ -31,7 +40,7 @@ public sealed class MediatrRpcClient<TMarker> : IMediatorRpcClient<TMarker>
         responseMessage.EnsureSuccessStatusCode();
 
         var responseBody = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-        var response = JsonConvert.DeserializeObject<TResponse>(responseBody);
+        var response = JsonSerializer.Deserialize<TResponse>(responseBody, DefaultJsonSerializerOptions);
 
         if (response is null)
         {
