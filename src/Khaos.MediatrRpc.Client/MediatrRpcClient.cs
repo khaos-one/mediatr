@@ -26,7 +26,6 @@ public sealed class MediatrRpcClient<TMarker> : IMediatorRpcClient<TMarker>
         var requestType = request.GetType();
         
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, TypeRoutePathFactory.Get(requestType));
-        // var requestBody = JsonConvert.SerializeObject(request, requestType, new JsonSerializerSettings());
         var requestBody = JsonSerializer.Serialize(
             request,
             requestType,
@@ -37,7 +36,10 @@ public sealed class MediatrRpcClient<TMarker> : IMediatorRpcClient<TMarker>
         var client = _httpClientFactory.CreateClient(HttpClientName);
         var responseMessage = await client.SendAsync(requestMessage, cancellationToken);
 
-        responseMessage.EnsureSuccessStatusCode();
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            throw new RpcClientException("Response status code does not indicate success.", responseMessage);
+        }
 
         var responseBody = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
         var response = JsonSerializer.Deserialize<TResponse>(responseBody, DefaultJsonSerializerOptions);
