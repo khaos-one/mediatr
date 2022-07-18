@@ -9,25 +9,39 @@ public static class ServiceCollectionExtensions
     public static void AddMediatrRpcClient(
         this IServiceCollection services,
         Type assemblyMarkerType,
-        Action<HttpClient> configureHttpClient)
+        Action<RpcClientOptions> configureOptions)
     {
-        AddMediatrRpcHttpClient(services, assemblyMarkerType, configureHttpClient);
-        AddMediatrRpcTransboundaryHandlers(services, assemblyMarkerType);
+        var options = new RpcClientOptions();
+
+        configureOptions(options);
+        
+        AddMediatrRpcHttpClient(services, assemblyMarkerType, options.ConfigureHttpClient);
+        AddTransboundaryHandlers(services, options, assemblyMarkerType);
     }
 
     private static void AddMediatrRpcHttpClient(
-        this IServiceCollection services,
+        IServiceCollection services,
         Type assemblyMarkerType,
-        Action<HttpClient> configureHttpClient)
+        Action<HttpClient>? configureHttpClient)
     {
-        services.AddHttpClient(HttpClientNameFactory.Get(assemblyMarkerType), configureHttpClient);
+        if (configureHttpClient is not null)
+        {
+            services.AddHttpClient(HttpClientNameFactory.Get(assemblyMarkerType), configureHttpClient);
+        }
+        else
+        {
+            services.AddHttpClient(HttpClientNameFactory.Get(assemblyMarkerType));
+        }
+
         services.AddScoped(
             typeof(IMediatorRpcClient<>).MakeGenericType(assemblyMarkerType),
             typeof(MediatrRpcClient<>).MakeGenericType(assemblyMarkerType));
     }
-
-    private static void AddMediatrRpcTransboundaryHandlers(
-        this IServiceCollection services, params Type[] assemblyMarkerTypes)
+    
+    private static void AddTransboundaryHandlers(
+        IServiceCollection services,
+        RpcClientOptions options,
+        params Type[] assemblyMarkerTypes)
     {
         var genericHandlerWithReturnType = typeof(RpcRequestHandler<,>);
         var genericHandlerInterfaceWithReturnType = typeof(IRequestHandler<,>);
@@ -38,14 +52,14 @@ public static class ServiceCollectionExtensions
         {
             var currentAssemblyTransboundaryClientType = transboundaryClientType.MakeGenericType(assemblyMarkerType);
             var assemblyDiscoverer = new MediatrAssemblyDiscoverer(new[] {assemblyMarkerType});
-            
+
             foreach (var mediatrType in assemblyDiscoverer.EnumerateMediatrTypes())
             {
                 var returnType = RequestReturnTypeExtractor.TryGetReturnType(mediatrType);
 
                 Type handlerInterfaceType;
                 Type handlerType;
-                
+
                 if (returnType is not null)
                 {
                     handlerInterfaceType =
@@ -57,7 +71,7 @@ public static class ServiceCollectionExtensions
                     handlerInterfaceType = genericHandlerInterfaceWoReturnType.MakeGenericType(mediatrType);
                     handlerType = genericHandlerWithReturnType.MakeGenericType(mediatrType, typeof(Unit));
                 }
-                
+
                 services.AddScoped(
                     handlerInterfaceType,
                     sp =>
@@ -67,7 +81,39 @@ public static class ServiceCollectionExtensions
 
                         return Activator.CreateInstance(handlerType, transboundaryClient)!;
                     });
+
+                if (options.CommonPipelineBehaviours.Any())
+                {
+                    AddCommonPipelineBehavioursForType(
+                        services,
+                        mediatrType,
+                        returnType,
+                        options.CommonPipelineBehaviours);
+                }
             }
         }
     }
+    
+    private static void AddCommonPipelineBehavioursForType(
+        IServiceCollection services,
+        Type requestType,
+        Type? responseType,
+        ICollection<Type> pipelineBehaviourTypes)
+    {
+        foreach (var behaviourType in pipelineBehaviourTypes)
+        {
+            if (!behaviourType.IsGenericType || behaviourType.GetInterface("IPipelineBehavior`2") is null)
+            {
+                throw new ArgumentException(
+                    "Provided common RPC pipeline behaviour must be generic type inherited from IPipelineBehaviour`2");
+            }
+
+            var concreteBehaviour = behaviourType.MakeGenericType(requestType, responseType ?? typeof(Unit));
+            var concreteBehaviourInterface =
+                typeof(IPipelineBehavior<,>).MakeGenericType(requestType, responseType ?? typeof(Unit));
+
+            services.AddTransient(concreteBehaviourInterface, concreteBehaviour);
+        }
+    }
+
 }
