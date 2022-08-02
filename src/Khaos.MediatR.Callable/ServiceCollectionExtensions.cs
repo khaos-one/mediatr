@@ -8,6 +8,7 @@ public static class ServiceCollectionExtensions
     {
         return services
             .AddTransient(typeof(ICall<,>), typeof(MediatorCall<,>))
+            .AddTransient(typeof(ICall<>), typeof(MediatorCall<>))
             .AddTransient(typeof(INotificationCall<>), typeof(MediatorNotificationCall<>));
     }
 }

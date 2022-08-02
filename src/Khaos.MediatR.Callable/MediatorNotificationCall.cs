@@ -12,6 +12,6 @@ public sealed class MediatorNotificationCall<TNotification>
         _mediator = mediator;
     }
 
-    public Task Publish(TNotification notification, CancellationToken cancellationToken) =>
+    public Task Publish(TNotification notification, CancellationToken cancellationToken = default) =>
         _mediator.Publish(notification, cancellationToken);
 }
