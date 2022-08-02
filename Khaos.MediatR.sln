@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Sandbox.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Sandbox.Contracts", "sandbox\Khaos.MediatR.Rpc.Sandbox.Contracts\Khaos.MediatR.Rpc.Sandbox.Contracts.csproj", "{EB6FDF43-865F-4915-84B1-B519E2363472}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Callable", "src\Khaos.MediatR.Callable\Khaos.MediatR.Callable.csproj", "{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{EB6FDF43-865F-4915-84B1-B519E2363472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB6FDF43-865F-4915-84B1-B519E2363472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB6FDF43-865F-4915-84B1-B519E2363472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E2497308-1EB0-4542-B6F5-6ED5E36588BD} = {28E8FB71-05C7-4F10-AE2A-69EFD8444CDC}
