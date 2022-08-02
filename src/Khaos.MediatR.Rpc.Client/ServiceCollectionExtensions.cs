@@ -6,7 +6,7 @@ namespace Khaos.MediatR.Rpc.Client;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddMediatrRpcClient(
+    public static void AddMediatRRpcClient(
         this IServiceCollection services,
         Type assemblyMarkerType,
         Action<RpcClientOptions> configureOptions)
@@ -15,11 +15,11 @@ public static class ServiceCollectionExtensions
 
         configureOptions(options);
         
-        AddMediatrRpcHttpClient(services, assemblyMarkerType, options.ConfigureHttpClient);
+        AddMediatRRpcHttpClient(services, assemblyMarkerType, options.ConfigureHttpClient);
         AddTransboundaryHandlers(services, options, assemblyMarkerType);
     }
 
-    private static void AddMediatrRpcHttpClient(
+    private static void AddMediatRRpcHttpClient(
         IServiceCollection services,
         Type assemblyMarkerType,
         Action<HttpClient>? configureHttpClient)
