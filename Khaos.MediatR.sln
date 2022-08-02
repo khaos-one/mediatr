@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc", "src\Khaos.MediatR.Rpc\Khaos.MediatR.Rpc.csproj", "{458AA173-BD5B-4CA9-B21C-F6E5E248955C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.AspNetCore", "src\Khaos.MediatR.Rpc.AspNetCore\Khaos.MediatR.Rpc.AspNetCore.csproj", "{049BDE26-435B-4CC0-B665-48BBC96357CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Client", "src\Khaos.MediatR.Rpc.Client\Khaos.MediatR.Rpc.Client.csproj", "{4F2DA6E0-495E-4380-AD63-B81930ECA49D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sandbox", "Sandbox", "{28E8FB71-05C7-4F10-AE2A-69EFD8444CDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Sandbox.Server", "sandbox\Khaos.MediatR.Rpc.Sandbox.Server\Khaos.MediatR.Rpc.Sandbox.Server.csproj", "{E2497308-1EB0-4542-B6F5-6ED5E36588BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Sandbox.Client", "sandbox\Khaos.MediatR.Rpc.Sandbox.Client\Khaos.MediatR.Rpc.Sandbox.Client.csproj", "{80BBAB22-D782-4F50-9628-99017FF7E7EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Sandbox.Contracts", "sandbox\Khaos.MediatR.Rpc.Sandbox.Contracts\Khaos.MediatR.Rpc.Sandbox.Contracts.csproj", "{EB6FDF43-865F-4915-84B1-B519E2363472}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{458AA173-BD5B-4CA9-B21C-F6E5E248955C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458AA173-BD5B-4CA9-B21C-F6E5E248955C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458AA173-BD5B-4CA9-B21C-F6E5E248955C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458AA173-BD5B-4CA9-B21C-F6E5E248955C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{049BDE26-435B-4CC0-B665-48BBC96357CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{049BDE26-435B-4CC0-B665-48BBC96357CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{049BDE26-435B-4CC0-B665-48BBC96357CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{049BDE26-435B-4CC0-B665-48BBC96357CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F2DA6E0-495E-4380-AD63-B81930ECA49D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F2DA6E0-495E-4380-AD63-B81930ECA49D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F2DA6E0-495E-4380-AD63-B81930ECA49D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F2DA6E0-495E-4380-AD63-B81930ECA49D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2497308-1EB0-4542-B6F5-6ED5E36588BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2497308-1EB0-4542-B6F5-6ED5E36588BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2497308-1EB0-4542-B6F5-6ED5E36588BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2497308-1EB0-4542-B6F5-6ED5E36588BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80BBAB22-D782-4F50-9628-99017FF7E7EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80BBAB22-D782-4F50-9628-99017FF7E7EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80BBAB22-D782-4F50-9628-99017FF7E7EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80BBAB22-D782-4F50-9628-99017FF7E7EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB6FDF43-865F-4915-84B1-B519E2363472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB6FDF43-865F-4915-84B1-B519E2363472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB6FDF43-865F-4915-84B1-B519E2363472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB6FDF43-865F-4915-84B1-B519E2363472}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E2497308-1EB0-4542-B6F5-6ED5E36588BD} = {28E8FB71-05C7-4F10-AE2A-69EFD8444CDC}
+		{80BBAB22-D782-4F50-9628-99017FF7E7EF} = {28E8FB71-05C7-4F10-AE2A-69EFD8444CDC}
+		{EB6FDF43-865F-4915-84B1-B519E2363472} = {28E8FB71-05C7-4F10-AE2A-69EFD8444CDC}
+	EndGlobalSection
+EndGlobal

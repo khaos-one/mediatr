@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <VersionPrefix>1.0.2</VersionPrefix>
+        <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+        <Authors>Egor Petenev</Authors>
+        <PackageProjectUrl>https://github.com/khaos-one/mediatr-rpc</PackageProjectUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Khaos.MediatR.Rpc\Khaos.MediatR.Rpc.csproj" />
+    </ItemGroup>
+
+</Project>
