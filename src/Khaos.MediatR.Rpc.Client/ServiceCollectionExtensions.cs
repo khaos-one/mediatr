@@ -22,15 +22,13 @@ public static class ServiceCollectionExtensions
     private static void AddMediatRRpcHttpClient(
         IServiceCollection services,
         Type assemblyMarkerType,
-        Action<HttpClient>? configureHttpClient)
+        Action<IHttpClientBuilder>? configureHttpClient)
     {
+        var httpClientBuilder = services.AddHttpClient(HttpClientNameFactory.Get(assemblyMarkerType));
+        
         if (configureHttpClient is not null)
         {
-            services.AddHttpClient(HttpClientNameFactory.Get(assemblyMarkerType), configureHttpClient);
-        }
-        else
-        {
-            services.AddHttpClient(HttpClientNameFactory.Get(assemblyMarkerType));
+            configureHttpClient(httpClientBuilder);
         }
 
         services.AddScoped(

@@ -20,7 +20,10 @@ services.AddMediatR(typeof(Khaos.MediatR.Rpc.Sandbox.Client.LocalCommand.Command
 services.AddMediatR(typeof(AssemblyMarker));
 services.AddMediatRRpcClient(typeof(AssemblyMarker), options =>
 {
-    options.ConfigureHttpClient = client => client.BaseAddress = new Uri("http://localhost:5000");
+    options.ConfigureHttpClient = builder =>
+    {
+        builder.ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5000"));
+    };
     options.CommonPipelineBehaviours.Add(typeof(LoggingPipelineBehaviour<,>));
 });
 
