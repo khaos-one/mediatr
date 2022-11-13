@@ -18,4 +18,8 @@
       <ProjectReference Include="..\Khaos.MediatR.Rpc\Khaos.MediatR.Rpc.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
 </Project>
