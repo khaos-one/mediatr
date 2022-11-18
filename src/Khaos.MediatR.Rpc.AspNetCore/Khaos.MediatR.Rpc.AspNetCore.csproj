@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <VersionPrefix>1.0.2</VersionPrefix>
+        <VersionPrefix>1.1.0</VersionPrefix>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <Authors>Egor Petenev</Authors>
         <PackageProjectUrl>https://github.com/khaos-one/mediatr</PackageProjectUrl>
@@ -16,10 +16,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Khaos.MediatR.Rpc\Khaos.MediatR.Rpc.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
 </Project>
