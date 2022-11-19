@@ -1,4 +1,8 @@
 using System.Net.Http.Headers;
+using System.Text;
+
+using Khaos.MediatR.Rpc.AspNetCore.Metadata;
+using Khaos.MediatR.Rpc.Codecs;
 
 using MediatR;
 
@@ -9,34 +13,41 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Khaos.MediatR.Rpc.AspNetCore;
 
-public class HttpEndpointsBuilder
+internal sealed class HttpEndpointsBuilder
 {
     private readonly MediatrAssemblyDiscoverer _discoverer;
-    private readonly IStreamCodecAndMetadataEmitter _streamCodec;
+    private readonly IStreamCodecFactory _streamCodecFactory;
+    private readonly CodecMetadataEmitterRegistry _codecMetadataEmitterRegistry;
 
-    public HttpEndpointsBuilder(MediatrAssemblyDiscoverer discoverer, IStreamCodecAndMetadataEmitter streamCodec)
+    public HttpEndpointsBuilder(
+        MediatrAssemblyDiscoverer discoverer,
+        IStreamCodecFactory streamCodecFactory,
+        CodecMetadataEmitterRegistry codecMetadataEmitterRegistry)
     {
         _discoverer = discoverer;
-        _streamCodec = streamCodec;
+        _streamCodecFactory = streamCodecFactory;
+        _codecMetadataEmitterRegistry = codecMetadataEmitterRegistry;
     }
 
     public void Build(IEndpointRouteBuilder routeBuilder)
     {
-        foreach (var mediatrType in _discoverer.EnumerateMediatrTypes())
+        foreach (var (markerType, mediatrType) in _discoverer.EnumerateMediatrTypes())
         {
+            var streamCodec = _streamCodecFactory.GetOrDefault(markerType);
+            
             RequestDelegate requestHandler = async httpContext =>
             {
                 if (!(MediaTypeHeaderValue.TryParse(httpContext.Request.ContentType, out var mt) 
-                      && _streamCodec.SupportedContentTypes.Contains(
+                        && streamCodec.SupportedContentTypes.Contains(
                             mt.MediaType!,
                             StringComparer.InvariantCultureIgnoreCase)))
                 {
                     throw new BadHttpRequestException(
-                        "Request context type is not acceptable for this request.",
+                        "Request content type is not acceptable for this request.",
                         StatusCodes.Status415UnsupportedMediaType);
                 }
 
-                var request = await _streamCodec.Decode(
+                var request = await streamCodec.Decode(
                     mediatrType,
                     httpContext.Request.Body,
                     httpContext.RequestAborted);
@@ -51,19 +62,25 @@ public class HttpEndpointsBuilder
                 var mediatr = httpContext.RequestServices.GetRequiredService<IMediator>();
                 var result = await mediatr.Send(request, httpContext.RequestAborted);
 
-                await using var outputStream = httpContext.Response.BodyWriter.AsStream();
-                await _streamCodec.Encode(
-                    result,
-                    outputStream,
-                    httpContext.RequestAborted);
+                using var outputStream = new MemoryStream();
+                await streamCodec.Encode(result, outputStream, httpContext.RequestAborted);
+
+                httpContext.Response.ContentType = streamCodec.OutputContentType;
+                httpContext.Response.ContentLength = outputStream.Length;
+
+                await httpContext.Response.StartAsync();
+                await httpContext.Response.BodyWriter.WriteAsync(outputStream.ToArray(), httpContext.RequestAborted);
+                await httpContext.Response.BodyWriter.FlushAsync();
             };
+
+            var codecMetadataEmitter = _codecMetadataEmitterRegistry.Get(streamCodec.GetType());
 
             routeBuilder
                 .MapPost(TypeRoutePathFactory.Get(mediatrType), requestHandler)
                 .WithMetadata(requestHandler.Method)
-                .WithMetadata(_streamCodec.CreateAcceptsMetadataForType(mediatrType))
+                .WithMetadata(codecMetadataEmitter.GetAcceptsMetadataForType(mediatrType))
                 .WithMetadata(
-                    _streamCodec.CreateProducesMetadataForType(
+                    codecMetadataEmitter.GetProducesMetadataForType(
                         RequestReturnTypeExtractor.TryGetReturnType(mediatrType)!));
         }
     }

@@ -1,10 +1,8 @@
 using System.Text.Json;
 
-using Microsoft.AspNetCore.Http.Metadata;
+namespace Khaos.MediatR.Rpc.Codecs;
 
-namespace Khaos.MediatR.Rpc.AspNetCore;
-
-public sealed class SystemTextJsonStreamCodec : IStreamCodecAndMetadataEmitter
+public class SystemTextJsonStreamCodec : IStreamCodec
 {
     private readonly JsonSerializerOptions? _options;
 
@@ -14,6 +12,7 @@ public sealed class SystemTextJsonStreamCodec : IStreamCodecAndMetadataEmitter
     }
 
     public IReadOnlySet<string> SupportedContentTypes => new HashSet<string> {"application/json"};
+    public string OutputContentType => "application/json; charset=utf-8";
 
     public ValueTask<object?> Decode(Type type, Stream stream, CancellationToken cancellationToken) =>
         JsonSerializer.DeserializeAsync(
@@ -31,7 +30,4 @@ public sealed class SystemTextJsonStreamCodec : IStreamCodecAndMetadataEmitter
             @object,
             _options,
             cancellationToken);
-
-    public IAcceptsMetadata CreateAcceptsMetadataForType(Type type) => new JsonAcceptsMetadata(type);
-    public IProducesResponseTypeMetadata CreateProducesMetadataForType(Type type) => new JsonProducesMetadata(type);
 }

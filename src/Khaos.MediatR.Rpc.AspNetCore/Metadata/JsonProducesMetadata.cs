@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Metadata;
 
-namespace Khaos.MediatR.Rpc.AspNetCore;
+namespace Khaos.MediatR.Rpc.AspNetCore.Metadata;
 
 internal sealed class JsonProducesMetadata : IProducesResponseTypeMetadata
 {

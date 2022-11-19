@@ -1,37 +1,40 @@
 using System.Text;
 using System.Text.Json;
 
-using MediatR;
+using Khaos.MediatR.Rpc.Codecs;
 
-using JsonSerializer = System.Text.Json.JsonSerializer;
+using MediatR;
 
 namespace Khaos.MediatR.Rpc.Client;
 
 public sealed class MediatrRpcClient<TMarker> : IMediatorRpcClient<TMarker>
 {
-    private static readonly string HttpClientName = HttpClientNameFactory.Get(typeof(TMarker));
+    private static readonly string HttpClientName = ConfigurationGroupNameFactory.Get(typeof(TMarker));
 
     // ReSharper disable once StaticMemberInGenericType
     private static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new(JsonSerializerDefaults.Web);
     
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IStreamCodecFactory _streamCodecFactory;
 
-    public MediatrRpcClient(IHttpClientFactory httpClientFactory)
+    public MediatrRpcClient(IHttpClientFactory httpClientFactory, IStreamCodecFactory streamCodecFactory)
     {
         _httpClientFactory = httpClientFactory;
+        _streamCodecFactory = streamCodecFactory;
     }
 
     public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
     {
         var requestType = request.GetType();
+        var streamCodec = _streamCodecFactory.GetOrDefault(typeof(TMarker));
         
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, TypeRoutePathFactory.Get(requestType));
-        var requestBody = JsonSerializer.Serialize(
-            request,
-            requestType,
-            DefaultJsonSerializerOptions);
+        var requestString = await streamCodec.EncodeToString(request, cancellationToken);
 
-        requestMessage.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+        requestMessage.Content = new StringContent(
+            requestString!,
+            Encoding.UTF8,
+            streamCodec.SupportedContentTypes.First());
 
         var client = _httpClientFactory.CreateClient(HttpClientName);
         var responseMessage = await client.SendAsync(requestMessage, cancellationToken);
@@ -41,15 +44,17 @@ public sealed class MediatrRpcClient<TMarker> : IMediatorRpcClient<TMarker>
             throw new RpcClientException("Response status code does not indicate success.", responseMessage);
         }
 
-        var responseBody = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-        var response = JsonSerializer.Deserialize<TResponse>(responseBody, DefaultJsonSerializerOptions);
+        var response = await streamCodec.Decode(
+            typeof(TResponse),
+            await responseMessage.Content.ReadAsStreamAsync(cancellationToken),
+            cancellationToken);
 
         if (response is null)
         {
             throw new InvalidOperationException("Response was null (deserialization error maybe?)");
         }
 
-        return response!;
+        return (TResponse) response!;
     }
 
     public Task<object?> Send(object request, CancellationToken cancellationToken = default) => 
