@@ -12,13 +12,13 @@ public class MediatrAssemblyDiscoverer
         _markerTypes = markerTypes;
     }
 
-    public IEnumerable<Type> EnumerateMediatrTypes()
+    public IEnumerable<(Type MarkerType, Type MediatrType)> EnumerateMediatrTypes()
     {
         var assemblies = _markerTypes
-            .Select(type => type.Assembly)
+            .Select(type => (type, type.Assembly))
             .ToImmutableHashSet();
         
-        foreach (var assembly in assemblies)
+        foreach (var (markerType, assembly) in assemblies)
         {
             var matchingTypes = assembly.GetExportedTypes()
                 .Where(
@@ -29,7 +29,7 @@ public class MediatrAssemblyDiscoverer
 
             foreach (var type in matchingTypes)
             {
-                yield return type;
+                yield return (markerType, type);
             }
         }
     }

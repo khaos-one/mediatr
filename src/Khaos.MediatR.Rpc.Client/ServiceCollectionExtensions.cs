@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
         Type assemblyMarkerType,
         Action<IHttpClientBuilder>? configureHttpClient)
     {
-        var httpClientBuilder = services.AddHttpClient(HttpClientNameFactory.Get(assemblyMarkerType));
+        var httpClientBuilder = services.AddHttpClient(ConfigurationGroupNameFactory.Get(assemblyMarkerType));
         
         if (configureHttpClient is not null)
         {
@@ -51,7 +51,7 @@ public static class ServiceCollectionExtensions
             var currentAssemblyTransboundaryClientType = transboundaryClientType.MakeGenericType(assemblyMarkerType);
             var assemblyDiscoverer = new MediatrAssemblyDiscoverer(new[] {assemblyMarkerType});
 
-            foreach (var mediatrType in assemblyDiscoverer.EnumerateMediatrTypes())
+            foreach (var (_, mediatrType) in assemblyDiscoverer.EnumerateMediatrTypes())
             {
                 var returnType = RequestReturnTypeExtractor.TryGetReturnType(mediatrType);
 

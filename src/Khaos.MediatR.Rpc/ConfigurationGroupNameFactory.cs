@@ -1,6 +1,6 @@
-namespace Khaos.MediatR.Rpc.Client;
+namespace Khaos.MediatR.Rpc;
 
-internal static class HttpClientNameFactory
+public static class ConfigurationGroupNameFactory
 {
     public static string Get(Type assemblyMarkerType) => $"$mediatr.{assemblyMarkerType.FullName!}";
 }

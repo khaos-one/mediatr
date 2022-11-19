@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Sandbox.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Callable", "src\Khaos.MediatR.Callable\Khaos.MediatR.Callable.csproj", "{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Codecs.NewtosoftJson", "src\Khaos.MediatR.Rpc.Codecs.NewtosoftJson\Khaos.MediatR.Rpc.Codecs.NewtosoftJson.csproj", "{F1EDB8B1-2663-443F-B3C1-F96D6E13568E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Khaos.MediatR.Rpc.Codecs.NewtosoftJson.AspNetCore", "src\Khaos.MediatR.Rpc.Codecs.NewtosoftJson.AspNetCore\Khaos.MediatR.Rpc.Codecs.NewtosoftJson.AspNetCore.csproj", "{CD649B18-31D3-49E3-A242-8CF292D71CBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FC0544D-7709-4856-AE9A-BBBD9AD7E6DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1EDB8B1-2663-443F-B3C1-F96D6E13568E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1EDB8B1-2663-443F-B3C1-F96D6E13568E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1EDB8B1-2663-443F-B3C1-F96D6E13568E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1EDB8B1-2663-443F-B3C1-F96D6E13568E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD649B18-31D3-49E3-A242-8CF292D71CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD649B18-31D3-49E3-A242-8CF292D71CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD649B18-31D3-49E3-A242-8CF292D71CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD649B18-31D3-49E3-A242-8CF292D71CBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E2497308-1EB0-4542-B6F5-6ED5E36588BD} = {28E8FB71-05C7-4F10-AE2A-69EFD8444CDC}

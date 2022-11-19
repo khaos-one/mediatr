@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace Khaos.MediatR.Rpc.Client;
 
 public class RpcClientException : Exception

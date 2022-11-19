@@ -1,4 +1,6 @@
 ﻿using Khaos.MediatR.Rpc.Client;
+using Khaos.MediatR.Rpc.Codecs;
+using Khaos.MediatR.Rpc.Codecs.NewtosoftJson;
 using Khaos.MediatR.Rpc.Sandbox.Client;
 using Khaos.MediatR.Rpc.Sandbox.Contracts;
 using Khaos.MediatR.Rpc.Sandbox.Contracts.Test;
@@ -18,11 +20,18 @@ services.AddMediatR(typeof(Khaos.MediatR.Rpc.Sandbox.Client.LocalCommand.Command
 
 // Add remote commands and a client.
 services.AddMediatR(typeof(AssemblyMarker));
+
+// Configure stream codecs.
+services.AddStreamCodec(
+    typeof(AssemblyMarker),
+    new NewtosoftJsonStreamCodec());
+
+// Configure client itself.
 services.AddMediatRRpcClient(typeof(AssemblyMarker), options =>
 {
     options.ConfigureHttpClient = builder =>
     {
-        builder.ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5000"));
+        builder.ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5001"));
     };
     options.CommonPipelineBehaviours.Add(typeof(LoggingPipelineBehaviour<,>));
 });

@@ -11,8 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MediatR" Version="9.0.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+      <ProjectReference Include="..\Khaos.MediatR.Rpc.AspNetCore\Khaos.MediatR.Rpc.AspNetCore.csproj" />
+      <ProjectReference Include="..\Khaos.MediatR.Rpc.Codecs.NewtosoftJson\Khaos.MediatR.Rpc.Codecs.NewtosoftJson.csproj" />
     </ItemGroup>
 
 </Project>
