@@ -73,15 +73,12 @@ internal sealed class HttpEndpointsBuilder
                 await httpContext.Response.BodyWriter.FlushAsync();
             };
 
+            var conventionBuilder = routeBuilder
+                .MapPost(TypeRoutePathFactory.Get(mediatrType), requestHandler)
+                .WithMetadata(requestHandler.Method);
             var codecMetadataEmitter = _codecMetadataEmitterRegistry.Get(streamCodec.GetType());
 
-            routeBuilder
-                .MapPost(TypeRoutePathFactory.Get(mediatrType), requestHandler)
-                .WithMetadata(requestHandler.Method)
-                .WithMetadata(codecMetadataEmitter.GetAcceptsMetadataForType(mediatrType))
-                .WithMetadata(
-                    codecMetadataEmitter.GetProducesMetadataForType(
-                        RequestReturnTypeExtractor.TryGetReturnType(mediatrType)!));
+            codecMetadataEmitter.EmitForType(conventionBuilder, mediatrType);
         }
     }
 }

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http.Metadata;
 
 namespace Khaos.MediatR.Rpc.AspNetCore.Metadata;
 
-internal sealed class JsonAcceptsMetadata : IAcceptsMetadata
+public sealed class JsonAcceptsMetadata : IAcceptsMetadata
 {
     public IReadOnlyList<string> ContentTypes => new[] {"application/json"};
     public bool IsOptional => false;
