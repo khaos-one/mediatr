@@ -1,5 +1,3 @@
-using System.Reflection;
-
 using Khaos.MediatR.Rpc.AspNetCore.Metadata;
 
 using Microsoft.Extensions.DependencyInjection;

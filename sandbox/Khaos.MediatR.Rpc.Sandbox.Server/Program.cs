@@ -1,8 +1,7 @@
-using System.Text.Json;
-
 using Khaos.MediatR.Callable;
 using Khaos.MediatR.Rpc.AspNetCore;
 using Khaos.MediatR.Rpc.Codecs;
+using Khaos.MediatR.Rpc.Codecs.NewtosoftJson;using Khaos.MediatR.Rpc.Codecs.NewtosoftJson.AspNetCore;
 using Khaos.MediatR.Rpc.Sandbox.Contracts;
 
 using MediatR;
@@ -12,9 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMediatR(typeof(AssemblyMarker), typeof(Program));
 
 // Configure stream codec for assembly and add needed Rpc.AspNetCore services.
+new NewtosoftJsonCodecMetadataEmitter();
 builder.Services.AddStreamCodec(
     typeof(AssemblyMarker),
-    new SystemTextJsonStreamCodec(new JsonSerializerOptions(JsonSerializerDefaults.Web)));
+    new NewtosoftJsonStreamCodec());
 builder.Services.AddMediatRRpcAspNetCore();
 
 // Configure MediatR callables.

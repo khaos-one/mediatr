@@ -1,7 +1,6 @@
 using Khaos.MediatR.Rpc.Codecs;
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http.Metadata;
 
 namespace Khaos.MediatR.Rpc.AspNetCore.Metadata;
 

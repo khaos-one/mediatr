@@ -1,5 +1,4 @@
 using System.Net.Http.Headers;
-using System.Text;
 
 using Khaos.MediatR.Rpc.AspNetCore.Metadata;
 using Khaos.MediatR.Rpc.Codecs;

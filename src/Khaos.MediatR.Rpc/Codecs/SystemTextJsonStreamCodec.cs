@@ -4,11 +4,11 @@ namespace Khaos.MediatR.Rpc.Codecs;
 
 public class SystemTextJsonStreamCodec : IStreamCodec
 {
-    private readonly JsonSerializerOptions? _options;
+    private readonly JsonSerializerOptions _options;
 
     public SystemTextJsonStreamCodec(JsonSerializerOptions? options = default)
     {
-        _options = options;
+        _options = options ?? DefaultOptions;
     }
 
     public IReadOnlySet<string> SupportedContentTypes => new HashSet<string> {"application/json"};
@@ -30,4 +30,6 @@ public class SystemTextJsonStreamCodec : IStreamCodec
             @object,
             _options,
             cancellationToken);
+
+    public static JsonSerializerOptions DefaultOptions = new(JsonSerializerDefaults.Web);
 }

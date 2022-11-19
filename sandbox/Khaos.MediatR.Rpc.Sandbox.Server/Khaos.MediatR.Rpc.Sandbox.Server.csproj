@@ -10,6 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Khaos.MediatR.Callable\Khaos.MediatR.Callable.csproj" />
       <ProjectReference Include="..\..\src\Khaos.MediatR.Rpc.AspNetCore\Khaos.MediatR.Rpc.AspNetCore.csproj" />
+      <ProjectReference Include="..\..\src\Khaos.MediatR.Rpc.Codecs.NewtosoftJson.AspNetCore\Khaos.MediatR.Rpc.Codecs.NewtosoftJson.AspNetCore.csproj" />
       <ProjectReference Include="..\Khaos.MediatR.Rpc.Sandbox.Contracts\Khaos.MediatR.Rpc.Sandbox.Contracts.csproj" />
     </ItemGroup>
 
