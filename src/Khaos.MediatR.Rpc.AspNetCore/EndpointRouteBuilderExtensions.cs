@@ -8,7 +8,7 @@ namespace Khaos.MediatR.Rpc.AspNetCore;
 
 public static class EndpointRouteBuilderExtensions
 {
-    public static IEndpointRouteBuilder MapMediatR(
+    public static IMediatREndpointsBuilder MapMediatR(
         this IEndpointRouteBuilder endpointRouteBuilder,
         params Type[] assembliesMarkerTypes)
     {
@@ -22,8 +22,9 @@ public static class EndpointRouteBuilderExtensions
             streamCodecFactory,
             codecMetadataEmitterRegistry);
 
-        httpEndpointBuilder.Build(endpointRouteBuilder);
-        
-        return endpointRouteBuilder;
+        var endpoints = httpEndpointBuilder.EnumerateAndBuild(endpointRouteBuilder);
+        var endpointsBuilder = new DefaultMediatREndpointsBuilder(endpoints);
+
+        return endpointsBuilder;
     }
 }
