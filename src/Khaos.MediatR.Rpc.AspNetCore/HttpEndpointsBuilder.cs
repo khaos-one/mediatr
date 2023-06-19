@@ -28,7 +28,7 @@ internal sealed class HttpEndpointsBuilder
         _codecMetadataEmitterRegistry = codecMetadataEmitterRegistry;
     }
 
-    public void Build(IEndpointRouteBuilder routeBuilder)
+    public IEnumerable<EndpointTypeInfo> EnumerateAndBuild(IEndpointRouteBuilder routeBuilder)
     {
         foreach (var (markerType, mediatrType) in _discoverer.EnumerateMediatrTypes())
         {
@@ -78,6 +78,8 @@ internal sealed class HttpEndpointsBuilder
             var codecMetadataEmitter = _codecMetadataEmitterRegistry.Get(streamCodec.GetType());
 
             codecMetadataEmitter.EmitForType(conventionBuilder, mediatrType);
+
+            yield return new EndpointTypeInfo(mediatrType, markerType, conventionBuilder);
         }
     }
 }
