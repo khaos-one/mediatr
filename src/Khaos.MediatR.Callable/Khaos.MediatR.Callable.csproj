@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
-        <VersionPrefix>1.0.1</VersionPrefix>
+        <VersionPrefix>3.0.0</VersionPrefix>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <Authors>Egor Petenev</Authors>
         <PackageProjectUrl>https://github.com/khaos-one/mediatr</PackageProjectUrl>
@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <PackageReference Include="MediatR" Version="9.0.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     </ItemGroup>
 
 </Project>
