@@ -2,9 +2,9 @@ using MediatR;
 
 namespace Khaos.MediatR.Rpc.Sandbox.Client.LocalCommand;
 
-public sealed class CommandHandler : AsyncRequestHandler<Command>
+public sealed class CommandHandler : IRequestHandler<Command>
 {
-    protected override Task Handle(Command request, CancellationToken cancellationToken)
+    public Task Handle(Command request, CancellationToken cancellationToken)
     {
         Console.WriteLine($"Local command: {request.Value}");
         

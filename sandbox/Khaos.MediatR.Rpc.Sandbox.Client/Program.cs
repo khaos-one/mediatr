@@ -1,5 +1,4 @@
-﻿using Khaos.MediatR.Rpc;
-using Khaos.MediatR.Rpc.Client;
+﻿using Khaos.MediatR.Rpc.Client;
 using Khaos.MediatR.Rpc.Codecs;
 using Khaos.MediatR.Rpc.Codecs.NewtosoftJson;
 using Khaos.MediatR.Rpc.Sandbox.Client;
@@ -16,11 +15,12 @@ var services = new ServiceCollection();
 
 services.AddLogging(builder => builder.AddConsole());
 
-// Add local commands.
-services.AddMediatR(typeof(Khaos.MediatR.Rpc.Sandbox.Client.LocalCommand.Command));
-
-// Add remote commands and a client.
-services.AddMediatR(typeof(AssemblyMarker));
+services.AddMediatR(
+    cfg => cfg
+        // Add local commands.
+        .RegisterServicesFromAssemblyContaining<Khaos.MediatR.Rpc.Sandbox.Client.LocalCommand.Command>()
+        // Add remote commands and a client.
+        .RegisterServicesFromAssemblyContaining<AssemblyMarker>());
 
 // Configure stream codecs.
 services.AddStreamCodec(
