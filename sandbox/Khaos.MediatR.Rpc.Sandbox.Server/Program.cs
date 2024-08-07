@@ -32,28 +32,29 @@ builder.Services.AddMediatRCallables();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication("StaticToken")
-    .AddScheme<StaticTokenAuthenticationSchemeOptions, StaticTokenAuthenticationScheme>("StaticToken", opts => { });
-builder.Services.AddAuthorization(
-    conf =>
-    {
-        conf.AddPolicy("admin", policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Name, "Test"));
-        conf.AddPolicy("non-passable-policy", policyBuilder => policyBuilder.RequireClaim("non-existent-claim", "non-existent-value"));
-    });
+// builder.Services.AddAuthentication("StaticToken")
+//     .AddScheme<StaticTokenAuthenticationSchemeOptions, StaticTokenAuthenticationScheme>("StaticToken", opts => { });
+// builder.Services.AddAuthorization(
+//     conf =>
+//     {
+//         conf.AddPolicy("admin", policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Name, "Test"));
+//         conf.AddPolicy("non-passable-policy", policyBuilder => policyBuilder.RequireClaim("non-existent-claim", "non-existent-value"));
+//     });
 
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 // Map MediatR RPC endpoints.
 app.MapMediatR(typeof(AssemblyMarker))
-    .RequireAuthorizationPolicies("admin")
-    .WithCustomEndpointForType(
-        typeof(Khaos.MediatR.Rpc.Sandbox.Contracts.TestWithoutReturnType.Command),
-        endpointBuilder => endpointBuilder.RequireAuthorization("non-passable-policy"));
+    ;
+    // .RequireAuthorizationPolicies("admin")
+    // .WithCustomEndpointForType(
+    //     typeof(Khaos.MediatR.Rpc.Sandbox.Contracts.TestWithoutReturnType.Command),
+    //     endpointBuilder => endpointBuilder.RequireAuthorization("non-passable-policy"));
 
 // Add OpenAPI exploration support.
 app.UseSwagger();

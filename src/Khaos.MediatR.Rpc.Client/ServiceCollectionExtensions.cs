@@ -42,6 +42,7 @@ public static class ServiceCollectionExtensions
         params Type[] assemblyMarkerTypes)
     {
         var genericHandlerWithReturnType = typeof(RpcRequestHandler<,>);
+        var genericHandlerWoReturnType = typeof(RpcRequestHandler<>);
         var genericHandlerInterfaceWithReturnType = typeof(IRequestHandler<,>);
         var genericHandlerInterfaceWoReturnType = typeof(IRequestHandler<>);
         var transboundaryClientType = typeof(IMediatorRpcClient<>);
@@ -58,16 +59,20 @@ public static class ServiceCollectionExtensions
                 Type handlerInterfaceType;
                 Type handlerType;
 
-                if (returnType is not null)
+                if (returnType != typeof(Unit) && returnType is not null)
                 {
                     handlerInterfaceType =
                         genericHandlerInterfaceWithReturnType.MakeGenericType(mediatrType, returnType);
                     handlerType = genericHandlerWithReturnType.MakeGenericType(mediatrType, returnType);
                 }
-                else
+                else if (returnType == typeof(Unit))
                 {
                     handlerInterfaceType = genericHandlerInterfaceWoReturnType.MakeGenericType(mediatrType);
-                    handlerType = genericHandlerWithReturnType.MakeGenericType(mediatrType, typeof(Unit));
+                    handlerType = genericHandlerWoReturnType.MakeGenericType(mediatrType);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid MediatR handler types.");
                 }
 
                 services.AddScoped(

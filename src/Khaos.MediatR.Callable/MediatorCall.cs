@@ -10,9 +10,9 @@ public class MediatorCall<TRequest, TResponse>(IMediator mediator)
         mediator.Send(request, cancellationToken);
 }
 
-public sealed class MediatorCall<TRequest>(Mediator mediator)
+public sealed class MediatorCall<TRequest>(IMediator mediator)
     : ICall<TRequest> 
-    where TRequest : IRequest<Unit>, IRequest
+    where TRequest : IRequest
 {
     public Task Send(TRequest request, CancellationToken cancellationToken = default) =>
         mediator.Send(request, cancellationToken);
