@@ -8,6 +8,8 @@ public interface ICall<in TRequest, TResponse>
     Task<TResponse> Send(TRequest request, CancellationToken cancellationToken = default);
 }
 
-public interface ICall<in TRequest> : ICall<TRequest, Unit> 
-    where TRequest : IRequest<Unit>
-{ }
+public interface ICall<in TRequest>
+    where TRequest : IRequest
+{
+    Task Send(TRequest request, CancellationToken cancellationToken = default);
+}

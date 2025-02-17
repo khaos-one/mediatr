@@ -8,13 +8,14 @@ using Khaos.MediatR.Rpc.Codecs;
 using Khaos.MediatR.Rpc.Codecs.NewtosoftJson;
 using Khaos.MediatR.Rpc.Sandbox.Server;
 
-using MediatR;
-
 using AssemblyMarker = Khaos.MediatR.Rpc.Sandbox.Contracts.AssemblyMarker;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMediatR(typeof(AssemblyMarker), typeof(Program));
+builder.Services.AddMediatR(
+    cfg => cfg
+        .RegisterServicesFromAssemblyContaining<AssemblyMarker>()
+        .RegisterServicesFromAssemblyContaining<Program>());
 
 // Configure stream codec for assembly and add needed Rpc.AspNetCore services.
 Touch.Assembly(typeof(Khaos.MediatR.Rpc.Codecs.NewtosoftJson.AspNetCore.AssemblyMarker));
@@ -31,8 +32,9 @@ builder.Services.AddMediatRCallables();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication("StaticToken")
-    .AddScheme<StaticTokenAuthenticationSchemeOptions, StaticTokenAuthenticationScheme>("StaticToken", opts => { });
+builder.Services
+    .AddAuthentication("StaticToken")
+    .AddScheme<StaticTokenAuthenticationSchemeOptions, StaticTokenAuthenticationScheme>("StaticToken", opts => {  });
 builder.Services.AddAuthorization(
     conf =>
     {

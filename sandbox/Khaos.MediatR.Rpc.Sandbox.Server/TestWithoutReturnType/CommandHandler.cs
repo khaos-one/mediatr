@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Khaos.MediatR.Rpc.Sandbox.Server.TestWithoutReturnType;
 
-public sealed class CommandHandler : AsyncRequestHandler<Command>
+public sealed class CommandHandler : IRequestHandler<Command>
 {
-    protected override async Task Handle(Command request, CancellationToken cancellationToken)
+    public async Task Handle(Command request, CancellationToken cancellationToken)
     {
         await Console.Out.WriteLineAsync(request.Value);
     }
