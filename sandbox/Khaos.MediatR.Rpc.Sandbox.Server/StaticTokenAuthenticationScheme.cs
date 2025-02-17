@@ -6,25 +6,24 @@ using Microsoft.Extensions.Options;
 
 namespace Khaos.MediatR.Rpc.Sandbox.Server;
 
-public sealed class StaticTokenAuthenticationScheme : AuthenticationHandler<StaticTokenAuthenticationSchemeOptions>
+public sealed class StaticTokenAuthenticationScheme 
+    : AuthenticationHandler<StaticTokenAuthenticationSchemeOptions>
 {
     public StaticTokenAuthenticationScheme(
         IOptionsMonitor<StaticTokenAuthenticationSchemeOptions> options,
         ILoggerFactory logger,
-        UrlEncoder encoder,
-        ISystemClock clock) : base(
+        UrlEncoder encoder) : base(
         options,
         logger,
-        encoder,
-        clock)
+        encoder)
     { }
 
-    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var claims = new[] { new Claim(ClaimTypes.Name, "Test") };
         var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "Tokens"));
         var ticket = new AuthenticationTicket(principal, this.Scheme.Name);
         
-        return AuthenticateResult.Success(ticket);
+        return Task.FromResult(AuthenticateResult.Success(ticket));
     }
 }
