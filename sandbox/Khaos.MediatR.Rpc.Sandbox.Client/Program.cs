@@ -41,11 +41,13 @@ var serviceProvider = services.BuildServiceProvider();
 
 // Test remote commands/queries.
 var mediator = serviceProvider.GetRequiredService<IMediator>();
-var result2 = await mediator.Send(new Query("hi again! "));
+var result2 = await mediator.Send(new Khaos.MediatR.Rpc.Sandbox.Contracts.Test.Query("hi again! "));
 
 Console.WriteLine(result2.Value);
 
-await mediator.Send(new Command("hi from client!"));
+// Uncomment the following to test whether the server will give 403 Forbidden on a command
+// that requires "non-existent-policy".
+// await mediator.Send(new Khaos.MediatR.Rpc.Sandbox.Contracts.TestWithoutReturnType.Command("hi from client!"));
 
 // Test local commands/queries.
 await mediator.Send(new Khaos.MediatR.Rpc.Sandbox.Client.LocalCommand.Command("local command invocation"));
